@@ -1,0 +1,40 @@
+<script>
+
+  var links = new Array();
+
+  // listen for messages from content scripts
+  chrome.extension.onRequest.addListener(
+    function(request, sender, sendResponse) {
+      console.log(sender.tab ? "from page content script:" + sender.tab.url : "from extension");
+      console.log("command: " + request.cmd);
+      var respond = true;
+      
+      if (request.cmd == "add_link") {
+        var src = request.src;
+        var dest = request.dest;
+        links.push()
+        console.log("Add link for: " + src + " => " + dest);
+      } 
+      
+      else if (request.cmd == "node_info") {
+        var favicon = request.favicon;
+        var title = request.title;
+        
+      }
+      
+      else {
+        respond = false
+      }
+      
+      if(respond) 
+        sendResponse({cmd: "ack"});
+      else
+        sendResponse({});
+
+  });
+  
+  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+      console.log("TAB CHANGE HAPPENED");
+  });
+
+</script>
