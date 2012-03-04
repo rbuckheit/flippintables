@@ -34,6 +34,7 @@
           var dest_id = loadNode(request.dest);
           links.push({"src": src_id, "dest": dest_id});
           console.log("ADD LINK: " + nodeToString(nodes[src_id]) + " => " + nodeToString(nodes[dest_id]));
+          printLinks();
         }
       } 
       
@@ -105,7 +106,15 @@
   /*=======
    * LINKS
    *======*/
+   
+   function linkToString(link) {
+     return "\t[" +  nodes[link.src].url + " => " + nodes[link.dest].url +"]"
+   }
+   
+   function printLinks() {
+     console.log("LINKS: ")
+     for(i = 0; i < links.length; i += 1)
+      console.log(linkToString(links[i]))
+   }
   
-
-
 </script>
