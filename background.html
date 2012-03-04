@@ -171,7 +171,11 @@ browserForce.setLinks(graphlinks);
   var callCallbacks = function(response) {
     // no concurrency, so no need to worry about concurrent access
     for (var i = 0; i < callbacks.length ; i++) {
-      callbacks[i](response);
+      try {
+        callbacks[i](response);
+      } catch(err) {
+        console.log("CONNECTION DiED?" + err);
+      }
     }
     callbacks = [];
   }
@@ -208,8 +212,8 @@ browserForce.setLinks(graphlinks);
   // listen for messages from content scripts
   chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
-      console.log(sender.tab ? "from page content script:" + sender.tab.url : "from extension");
-      console.log("command: " + request.cmd);
+      //console.log(sender.tab ? "from page content script:" + sender.tab.url : "from extension");
+      //console.log("command: " + request.cmd);
       var respond = true;
       
       // check if user wants to record node history 

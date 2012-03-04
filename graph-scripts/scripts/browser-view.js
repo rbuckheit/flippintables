@@ -153,8 +153,21 @@ function BrowserView(svg) {
   this.setLinks = function(l) {
     if (!userLock) {
       links = l;
+      links.forEach(function(d) {
+        d.source = findNodeWithIndex(d.source);
+        d.target = findNodeWithIndex(d.target);
+      })
       update();
     }
+  }
+  function findNodeWithIndex(index) {
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].index == index) {
+        return nodes[i];
+      }
+    }
+    console.log("couldn't find node");
+    return undefined;
   }
 
   var select = function(predicate) {

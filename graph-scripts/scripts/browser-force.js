@@ -24,6 +24,15 @@ function BrowserForce() {
     return links;
   }
   
+  this.getLinksAsIndexes = function() {
+    return links.map(function(l) {
+      var a = {};
+      a.source = l.source.index;
+      a.target = l.target.index;
+      return a;
+    });
+  }
+  
   this.setNodes = function(n) {
     graph.stop();
     nodes = n;
