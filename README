@@ -1,0 +1,8 @@
+To install (in development mode):
+    Open chrome preferences
+    Make sure 'developer mode' is checked
+    Click "Load unpacked extension" - point it to the root project directory.
+
+To use:
+    Extension button toggles 'recording' on or off.
+    To view the graph of pages, use the hotkey "CTRL+SHIFT+G"
