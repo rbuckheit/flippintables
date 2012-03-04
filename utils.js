@@ -7,3 +7,11 @@ function qualify_url(url) {
 	img.src = null;
 	return url;
 }
+
+function array_to_str(array) {
+  var str = ""
+  for (i = 0; i < array.length; i += 1) {
+    str += JSON.stringify(array[i]) + "\n";
+  }
+  return str;
+}

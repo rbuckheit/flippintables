@@ -33,15 +33,16 @@
     }
   });
   
-//  chrome.extension.onRequest.addListener( 
-//    function(request, sender, sendResponse) {
-//      if (request.cmd == "switch_on_off") {
-//        recording = !recording;
-//        console.log("Set recording to " + recording)
-//        sendResponse({cmd: "ack"});
-//      } 
-//  });
-
+  // listen for load node requests 
+  chrome.extension.onRequest.addListener(
+    function(request, sender, sendResponse) {
+      if (request.cmd == "get_nodes") {
+        sendResponse({cmd: "ack", nodes: nodes});
+      } else if ((request.cmd) == "get_links") {
+        console.log("Send links: " + links);
+        sendResponse({cmd: "ack", links: links});
+      }
+    });
 
   // listen for messages from content scripts
   chrome.extension.onRequest.addListener(
