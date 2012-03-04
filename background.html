@@ -1,5 +1,22 @@
 <script>
 
+/* 
+  MODELS
+
+  Node: { 
+    "url": "http://www.google.com",
+    "title": "Google",
+    "favicon": "http://www.google.com/favicon.ico",
+    "created_at": "<dateTime>"
+  }
+  
+  Link: {
+    TODO
+  }
+
+*/
+
+  var nodes = new Array();
   var links = new Array();
 
   // listen for messages from content scripts
@@ -19,8 +36,11 @@
       else if (request.cmd == "node_info") {
         var favicon = request.favicon;
         var title = request.title;
-        var url= request.url;
-        console.log("Node info [" + url + "] " + favicon + " " + title);
+        var node = loadNode(request.url);
+        console.log("Node info [" + node.url + "] " + favicon + " " + title);
+        node.title = title
+        node.favicon = favicon
+        printNodes();
         // TODO 
       }
       
@@ -35,8 +55,35 @@
 
   });
   
+  // load node with specified url. creates node if it doesn't exist
   function loadNode(url) {
+    var target = null;
     
+    // search list
+    for (i = 0; i < nodes.length; i += 1) {
+      var node = nodes[i];
+      if (node.url == url) {
+        target = node;
+      }
+    }
+    
+    // create if not found
+    if (target == null) {
+      console.log("node not found. creating...");
+      target = {"url": url}
+      nodes.push(target);
+    }
+    printNodes();
+    return target;
+  }
+  
+  // print contents of nodes list.
+  function printNodes() {
+    console.log("NODES:");
+    for (i = 0; i < nodes.length; i += 1) {
+      var node = nodes[i];
+      console.log("\t[url=" + node.url + ", title=" + node.title + ", favicon=" + node.favicon  + "]");
+    }
   }
   
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
