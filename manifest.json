@@ -8,7 +8,8 @@
   },
   "content_scripts": [ {
     "matches": ["<all_urls>"],
-    "js": ["jquery-1.7.min.js", "utils.js", "link_listener.js", "load_listener.js"]
+    "css": ["graph.css"],
+    "js": ["jquery-1.7.min.js", "utils.js", "link_listener.js", "load_listener.js", "graph.js"]
   } ],
   "permissions": [
     "http://api.flickr.com/"

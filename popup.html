@@ -1,1 +1,13 @@
-<h1> Test Test </h1>
+<h1> FlippinTables </h1>
+
+<script>
+  function turnOn() {
+    chrome.extension.sendRequest({cmd: "switch_on_off"}, function(response) {
+      console.log("RESPONSE: " + response.cmd);
+    });
+  }
+</script>
+
+<form name="input" action="javascript: turnOn()" method="get">
+<input type="submit" value="Turn On" />
+</form>

@@ -19,6 +19,17 @@
 
   var nodes = new Array();
   var links = new Array();
+  var recording = true;
+
+  // listen for messages from the popup.
+  chrome.extension.onRequest.addListener( 
+    function(request, sender, sendResponse) {
+      if (request.cmd == "switch_on_off") {
+        recording = !recording;
+        console.log("Set recording to " + recording)
+        sendResponse({cmd: "ack"});
+      } 
+  });
 
   // listen for messages from content scripts
   chrome.extension.onRequest.addListener(
@@ -56,9 +67,6 @@
       
       if(respond) 
         sendResponse({cmd: "ack"});
-      else
-        sendResponse({});
-
   });
   
   /*
