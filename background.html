@@ -21,15 +21,21 @@
   var links = new Array();
   var recording = true;
 
-  // listen for messages from the popup.
-  chrome.extension.onRequest.addListener( 
-    function(request, sender, sendResponse) {
-      if (request.cmd == "switch_on_off") {
-        recording = !recording;
-        console.log("Set recording to " + recording)
-        sendResponse({cmd: "ack"});
-      } 
+  // turn on or off node recording when browser action icon clicked
+  chrome.browserAction.onClicked.addListener(function(tab) {
+    recording = !recording;
+    console.log("Set recording to " + recording)
   });
+  
+//  chrome.extension.onRequest.addListener( 
+//    function(request, sender, sendResponse) {
+//      if (request.cmd == "switch_on_off") {
+//        recording = !recording;
+//        console.log("Set recording to " + recording)
+//        sendResponse({cmd: "ack"});
+//      } 
+//  });
+
 
   // listen for messages from content scripts
   chrome.extension.onRequest.addListener(
@@ -38,8 +44,13 @@
       console.log("command: " + request.cmd);
       var respond = true;
       
+      // check if user wants to record node history 
+      if (recording == false) {
+        return;
+      }
+      
       if (request.cmd == "add_link") {
-        // TODO: error conditions -- duplicate links, etc.
+      // TODO: error conditions -- duplicate links, etc.
         if (request.src != request.dest) {
           var src_id = loadNode(request.src);
           var dest_id = loadNode(request.dest);
