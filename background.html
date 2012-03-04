@@ -11,7 +11,8 @@
   }
   
   Link: {
-    TODO
+    "src": <src_index_in_list>,
+    "dest": <dest_index_in_list>
   }
 
 */
@@ -27,21 +28,20 @@
       var respond = true;
       
       if (request.cmd == "add_link") {
-        var src = request.src;
-        var dest = request.dest;
-        links.push()
-        console.log("Add link for: " + src + " => " + dest);
+        var src_id = loadNode(request.src);
+        var dest_id = loadNode(request.dest);
+        links.push({"src": src_id, "dest": dest_id});
+        console.log("ADD LINK: " + nodes[src_id] + " => " + nodes[dest_id]);
       } 
       
       else if (request.cmd == "node_info") {
         var favicon = request.favicon;
         var title = request.title;
-        var node = loadNode(request.url);
-        console.log("Node info [" + node.url + "] " + favicon + " " + title);
+        var node = nodes[loadNode(request.url)];
+        console.log("NODE INFO [" + node.url + "] " + favicon + " " + title);
         node.title = title
         node.favicon = favicon
         printNodes();
-        // TODO 
       }
       
       else {
@@ -55,7 +55,8 @@
 
   });
   
-  // load node with specified url. creates node if it doesn't exist
+  // load node with specified url. creates node if it doesn't exist.
+  // returns index in the nodes list
   function loadNode(url) {
     var target = null;
     
@@ -63,7 +64,7 @@
     for (i = 0; i < nodes.length; i += 1) {
       var node = nodes[i];
       if (node.url == url) {
-        target = node;
+        return i;
       }
     }
     
@@ -72,9 +73,8 @@
       console.log("node not found. creating...");
       target = {"url": url}
       nodes.push(target);
+      return nodes.length - 1;
     }
-    printNodes();
-    return target;
   }
   
   // print contents of nodes list.

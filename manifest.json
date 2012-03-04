@@ -1,10 +1,10 @@
 {
-  "name": "AngelHack",
+  "name": "FlippinTables",
   "version": "1.0",
   "description": "Stores visual representation of user's navigation between pages",
   "browser_action": {
     "default_icon": "icon.png",
-	"default_popup" : "popup.html"
+	  "default_popup" : "popup.html"
   },
   "content_scripts": [ {
     "matches": ["<all_urls>"],

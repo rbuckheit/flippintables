@@ -2,8 +2,8 @@
 
 // push a new link/dest node when we go to the next page
 $("a").click(function() {
-	var src = qualify(window.location.href);
-	var dest = qualify($(this).attr("href"));
+	var src = qualify_url(window.location.href);
+	var dest = qualify_url($(this).attr("href"));
 	console.log("ADD LINK: " + src + "-->" + dest);
 	
 	chrome.extension.sendRequest({cmd: "add_link", src: src, dest: dest}, function(response) {
