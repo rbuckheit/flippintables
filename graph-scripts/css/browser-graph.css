@@ -1,0 +1,11 @@
+svg .node-description {
+  display:none;
+}
+
+svg g.node .node-title-label {
+  visibility:hidden;
+}
+
+svg g.node:hover .node-title-label {
+  visibility:visible;
+}

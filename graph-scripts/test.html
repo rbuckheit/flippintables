@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Graph test</title>
+  <link href="css/browser-graph.css" rel="stylesheet" type="text/css" media="all" />
+  <script type="text/javascript" src="scripts/d3.v2.min.js"></script>
+</head>
+<body>
+  <div id="graph"/>
+  <script type="text/javascript" src="scripts/browser-graph.js"></script>
+  
+  <script type="text/javascript">
+    // inline javascript yeaaah!
+    var nodes = [{"title":"test1", "image":"images/facebook.ico", "fixed":true, "x":400, "y":20}, 
+      {"title":"test2", "image":"images/google.ico", "x":400, "y":22}];
+    var links = [{"source":0, "target":1}];
+
+    var svg = d3.select("#graph")
+            .append("svg:svg")
+            .attr("class", "browser-graph")
+            .attr("width", 960)
+            .attr("height", 500);
+            
+    var browserGraph = new BrowserGraph(svg);
+    browserGraph.addNode(nodes);
+    browserGraph.addLink(links);
+  </script>
+
+  <a href="javascript:browserGraph.addRando();">hello</a>
+</body>
+</html>
+    
+    
