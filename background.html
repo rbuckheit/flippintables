@@ -7,7 +7,7 @@
     "url": "http://www.google.com",
     "title": "Google",
     "favicon": "http://www.google.com/favicon.ico",
-    "created_at": "<dateTime>"
+    "timestamp": "<dateTime>"
   }
   
   Link: {
@@ -40,16 +40,17 @@
       else if (request.cmd == "node_info") {
         var favicon = request.favicon;
         var title = request.title;
-        var date= new Date().getTime();
+        var timestamp= new Date().getTime();
         var node = nodes[loadNode(request.url)];
-        console.log("NODE INFO [" + node.url + "] " + favicon + " " + title + " timestamp " + date);
-        node.title = title
-        node.favicon = favicon
+        console.log("NODE INFO [" + node.url + "] " + favicon + " " + title + " timestamp " + timestamp);
+        node.title = title;
+        node.favicon = favicon;
+        node.timestamp = timestamp;
         printNodes();
       }
       
       else {
-        respond = false
+        respond = false;
       }
       
       if(respond) 
@@ -91,7 +92,7 @@
   }
   
   function nodeToString(node) {
-    return "\t[url=" + node.url + ", title=" + node.title + ", favicon=" + node.favicon  + "]";
+    return "\t[url=" + node.url + ", title=" + node.title + ", favicon=" + node.favicon + ", timestamp=" + node.timestamp + "]";
   }
   
   // print contents of nodes list.
