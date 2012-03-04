@@ -25,7 +25,7 @@ function BrowserGraph(svg) {
   var node;
   var nodeDescriptions;
 
-  graph.on("tick", function() {
+  var updateNodeGraphicalElements = function() {
      link.attr("x1", function(d) { return d.source.x; })
          .attr("y1", function(d) { return d.source.y; })
          .attr("x2", function(d) { return d.target.x; })
@@ -34,7 +34,9 @@ function BrowserGraph(svg) {
      node.attr("transform", function(d) {return "translate(" + d.x+ "," + d.y + ")";});
      nodeDescriptions.attr("x", function(d) {return d.x})
         .attr("y", function(d) {return d.y})
-    });
+  }
+  
+  graph.on("tick", updateNodeGraphicalElements);
 
   var nodeClicked = function() {
     // when the node is clicked, this function is called
@@ -42,7 +44,27 @@ function BrowserGraph(svg) {
 
   var nodeMouseDown = function() {
     freezeNodes();
+    var datum = d3.select(this).data()[0];
+    if (datum.selected == undefined || !datum.selected) {
+      selectIndex(datum.index);
+    }
   }
+
+  var nodeDragMove = function() {
+    nodes.forEach(function (d) {
+      if (d.selected) {
+        d.px = d.px + d3.event.dx;
+        d.py = d.py + d3.event.dy;
+        d.x = d.x + d3.event.dx;
+        d.y = d.y + d3.event.dy;
+      }
+    });
+    // then we need to update graphical elements
+    updateNodeGraphicalElements();
+  }
+
+  var nodeDrag = d3.behavior.drag()
+      .on("drag", nodeDragMove);
 
   var updateLinkElements = function() {
     var allLinks = svg.selectAll("g.link-layer").selectAll("line.link")
@@ -63,7 +85,7 @@ function BrowserGraph(svg) {
 
     var newNodes = allNodes.enter().append("svg:g")
               .attr("class", "node")
-              .call(graph.drag)
+              .call(nodeDrag)
               .on("click", nodeClicked)
               .on("mousedown", nodeMouseDown)
     newNodes.append("svg:rect")
@@ -84,7 +106,8 @@ function BrowserGraph(svg) {
               .attr("dy", ".35em")
               .text(function(d) {return d.title;});
     allNodes.exit().remove();
-    allNodes.classed("selected-node", function(d) { console.log(d.selected); return d.selected;})
+    allNodes.classed("selected-node", function(d) { return d.selected;})
+            .classed("deleted-node", function(d) {return d.deleted;})
 
     nodeDescriptions = updateNodeDescriptions();
     return svg.selectAll("g.node");
@@ -115,6 +138,8 @@ function BrowserGraph(svg) {
     node = updateNodeElements();
 
     graph.start();
+    
+    nodes.forEach(function (d) {console.log(d.index);});
   }
   
   this.addNode = function(node) {
@@ -159,14 +184,15 @@ function BrowserGraph(svg) {
     }
   }
 
+  var lastAddedIndex = 0;
   this.addRando = function() {
     var index = Math.floor((Math.random()*(nodes.length + 1))) - 1;
     if (index < 0) index = undefined;
     console.log(index);
-    this.addNodeWithParent({"title":"test1", "image":"images/facebook.ico"},index);
+    this.addNodeWithParent({"title":"test"+lastAddedIndex++, "image":"images/facebook.ico"},index);
   }
 
-  this.select = function(predicate) {
+  var select = function(predicate) {
     selection = nodes.filter(predicate);
     nodes.forEach(function(d) {
       d.selected = false;
@@ -175,6 +201,14 @@ function BrowserGraph(svg) {
       d.selected = true;
     });
     update();
+  }
+  
+  this.select = function(predicate) {
+    select(predicate);
+  }
+  
+  var selectIndex = function(index) {
+    select(function(d) {return d.index == index;});
   }
 
   this.getSelection = function() {
@@ -191,6 +225,32 @@ function BrowserGraph(svg) {
         d.target.fixed = false;
       }
     });
+  }
+  
+  this.deleteSelected = function() {
+    // THIS IS BAD. Bugs if we try to splice the node list. So instead we hide the deleted nods.
+    var isSelected = function(d) {return d.selected != undefined && d.selected;};
+    var i = 0;
+    while (i < links.length) {
+      if(isSelected(links[i].source) || isSelected(links[i].target)) {
+        links.splice(i,1);
+      } else {
+        i++;
+      }
+    }
+    i = 0;
+    while (i < nodes.length) {
+      if (isSelected(nodes[i])) {
+        nodes[i].deleted = true;
+      }
+      i++;
+    }
+    
+    update();
+  }
+
+  this.getGraph = function() {
+    return graph;
   }
   
   update();

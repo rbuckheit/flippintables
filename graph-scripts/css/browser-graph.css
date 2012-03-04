@@ -21,3 +21,7 @@ svg g.node.selected-node .node-selection-indicator {
 svg .selection-rectangle {
   fill:rgba(255, 255, 0, .2);
 }
+
+svg g.node.deleted-node * {
+  display:none;
+}
