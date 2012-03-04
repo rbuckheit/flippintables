@@ -25,3 +25,7 @@ svg .selection-rectangle {
 svg g.node.deleted-node * {
   display:none;
 }
+
+svg {
+  background-color:red;
+}
