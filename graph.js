@@ -12,7 +12,7 @@ var browserGraph;
             .attr("height", 500);
             
     var selection = new GraphSelection(svg);
-    browserGraph = new BrowserGraph(svg);
+    browserGraph = new BrowserView(svg);
     
     selection.onSelection(function() {
       var lastrect = selection.getLastRect();
@@ -20,7 +20,19 @@ var browserGraph;
         return (d.x > lastrect.x && d.x < lastrect.x + lastrect.width && d.y > lastrect.y && d.y < lastrect.y + lastrect.height);
       });
     });
+// polling loop
+var pollingLoop = function() {
+  chrome.extension.sendRequest({cmd: "polling_loop"}, function(response) {
+    browserGraph.setNodes(response.node_data);
+    browserGraph.setLinks(response.link_data);
+    pollingLoop();
+  });
+}
+pollingLoop();
 
+browserGraph.onDataUpdate(function() {
+  chrome.extension.sendRequest({cmd: "force_graph", nodes:browserGraph.getNodes(), links:browserGraph.getLinks()});
+});
 
 // bind hotkeys
 
@@ -30,7 +42,7 @@ function loadNodes() {
     var nodes = [];
     chrome.extension.sendRequest({cmd: "get_nodes"}, function(response) {
       nodes = response.nodes;
-      addNodes(nodes);
+      // addNodes(nodes);
     console.log("getting links");
     var links = [];
     chrome.extension.sendRequest({cmd: "get_links"}, function(response) {
@@ -38,7 +50,7 @@ function loadNodes() {
       for (i = 0; i < response.links.length; i += 1) {
         console.log("recv link: " + response.links[i]);
       }
-      addLinks(links);
+      // addLinks(links);
     });
     });
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src = "graph-scripts/scripts/d3.v2.min.js"></script>
+</head>
+<body>
+<script src = "graph-scripts/scripts/browser-force.js"></script>
+<script>
+    var graphnodes = [{"title":"test1", "image":"images/facebook.ico", "fixed":true, "x":400, "y":20}, 
+      {"title":"test2", "image":"images/google.ico", "x":400, "y":22}];
+    var graphlinks = [{"source":0, "target":1}];
+// browser graph
+var browserForce = new BrowserForce();
+browserForce.setNodes(graphnodes);
+browserForce.setLinks(graphlinks);
+
+/* 
+  MODELS
+
+  Node: { 
+    "url": "http://www.google.com",
+    "title": "Google",
+    "favicon": "http://www.google.com/favicon.ico",
+    "timestamp": "<dateTime>"
+  }
+  
+  Link: {
+    "src": <src_index_in_list>,
+    "dest": <dest_index_in_list>
+  }
+
+*/
+
+  var nodes = new Array();
+  var links = new Array();
+  var recording = true;
+  
+  var node_data = [];
+  var link_data = [];
+
+  var respondWithGraph = function() {
+    console.log("respond withg graph");
+  }
+  browserForce.addTickCallback(respondWithGraph);
+  var pollingLoop = function() {
+    respondWithGraph();
+    setTimeout(pollingLoop,1000);
+  }
+//  pollingLoop();
+  
+  var i = 0;
+  d3.timer(function() {
+    i++;
+    console.log(i);
+    return i > 300;
+  });
+
+
+
+</script>
+</body>
+</html>

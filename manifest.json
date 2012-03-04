@@ -9,7 +9,7 @@
     "matches": ["<all_urls>"],
     "css": ["graph.css", "graph-scripts/css/browser-graph.css"],
     "js": ["jquery-1.7.min.js", 
-      "graph-scripts/scripts/d3.v2.min.js", "graph-scripts/scripts/browser-graph.js", "graph-scripts/scripts/graph-selection.js",
+      "graph-scripts/scripts/d3.v2.min.js", "graph-scripts/scripts/browser-view.js", "graph-scripts/scripts/graph-selection.js",
       "utils.js", "link_listener.js", "load_listener.js", "shortcut.js", "graph.js"
       ]
   } ],

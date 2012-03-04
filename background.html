@@ -1,4 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src = "graph-scripts/scripts/d3.v2.min.js" type="text/javascript"></script>
+</head>
+<body>
+<script src = "graph-scripts/scripts/browser-force.js" type="text/javascript"></script>
 <script>
+(function() {
+var d3_timer_queue = null,
+    d3_timer_interval, // is an interval (or frame) active?
+    d3_timer_timeout; // is a timeout active?
+
+// The timer will continue to fire until callback returns true.
+d3.timer = function(callback, delay, then) {
+  var found = false,
+      t0,
+      t1 = d3_timer_queue;
+
+  if (arguments.length < 3) {
+    if (arguments.length < 2) delay = 0;
+    else if (!isFinite(delay)) return;
+    then = Date.now();
+  }
+
+  // See if the callback's already in the queue.
+  while (t1) {
+    if (t1.callback === callback) {
+      t1.then = then;
+      t1.delay = delay;
+      found = true;
+      break;
+    }
+    t0 = t1;
+    t1 = t1.next;
+  }
+
+  // Otherwise, add the callback to the queue.
+  if (!found) d3_timer_queue = {
+    callback: callback,
+    then: then,
+    delay: delay,
+    next: d3_timer_queue
+  };
+
+  // Start animatin'!
+  if (!d3_timer_interval) {
+    d3_timer_timeout = clearTimeout(d3_timer_timeout);
+    d3_timer_interval = 1;
+    d3_timer_frame(d3_timer_step);
+  }
+}
+
+function d3_timer_step() {
+  var elapsed,
+      now = Date.now(),
+      t1 = d3_timer_queue;
+
+  while (t1) {
+    elapsed = now - t1.then;
+    if (elapsed >= t1.delay) t1.flush = t1.callback(elapsed);
+    t1 = t1.next;
+  }
+
+  var delay = d3_timer_flush() - now;
+  if (delay > 24) {
+    if (isFinite(delay)) {
+      clearTimeout(d3_timer_timeout);
+      d3_timer_timeout = setTimeout(d3_timer_step, delay);
+    }
+    d3_timer_interval = 0;
+  } else {
+    d3_timer_interval = 1;
+    d3_timer_frame(d3_timer_step);
+  }
+}
+
+d3.timer.flush = function() {
+  var elapsed,
+      now = Date.now(),
+      t1 = d3_timer_queue;
+
+  while (t1) {
+    elapsed = now - t1.then;
+    if (!t1.delay) t1.flush = t1.callback(elapsed);
+    t1 = t1.next;
+  }
+
+  d3_timer_flush();
+};
+
+// Flush after callbacks, to avoid concurrent queue modification.
+function d3_timer_flush() {
+  var t0 = null,
+      t1 = d3_timer_queue,
+      then = Infinity;
+  while (t1) {
+    if (t1.flush) {
+      t1 = t0 ? t0.next = t1.next : d3_timer_queue = t1.next;
+    } else {
+      then = Math.min(then, t1.then + t1.delay);
+      t1 = (t0 = t1).next;
+    }
+  }
+  return then;
+}
+
+var d3_timer_frame =  function(callback) { setTimeout(callback, 17); };
+    })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    var graphnodes = [{"title":"test1", "image":"graph-scripts/images/facebook.ico", "fixed":true, "x":400, "y":20}, 
+      {"title":"test2", "image":"graph-scripts/images/google.ico", "x":400, "y":22}];
+    var graphlinks = [{"source":0, "target":1}];
+// browser graph
+var browserForce = new BrowserForce();
+browserForce.setNodes(graphnodes);
+browserForce.setLinks(graphlinks);
 
 /* 
   MODELS
@@ -20,6 +150,9 @@
   var nodes = new Array();
   var links = new Array();
   var recording = true;
+  
+  var node_data = [];
+  var link_data = [];
 
   // turn on or off node recording when browser action icon clicked
   chrome.browserAction.onClicked.addListener(function(tab) {
@@ -32,6 +165,34 @@
       chrome.browserAction.setIcon({path:"icon.png"});
     }
   });
+  
+  // polling loop listeners
+  var callbacks = [];
+  var callCallbacks = function(response) {
+    // no concurrency, so no need to worry about concurrent access
+    for (var i = 0; i < callbacks.length ; i++) {
+      callbacks[i](response);
+    }
+    callbacks = [];
+  }
+  var respondWithGraph = function() {
+    callCallbacks({cmd:"ack", node_data:browserForce.getNodes(), link_data:browserForce.getLinks()});
+  }
+  browserForce.addTickCallback(respondWithGraph);
+  var pollingLoop = function() {
+    respondWithGraph();
+    setTimeout(pollingLoop,1000);
+  }
+  pollingLoop();
+  chrome.extension.onRequest.addListener(
+    function(request, sender, sendResponse) {
+      if (request.cmd == "polling_loop") {
+        callbacks.push(sendResponse);
+      } else if (request.cmd == "force_graph") {
+        browserForce.setNodes(request.nodes);
+      }
+    }
+  );
   
   // listen for load node requests 
   chrome.extension.onRequest.addListener(
@@ -141,6 +302,8 @@
      console.log("LINKS: ")
      for(i = 0; i < links.length; i += 1)
       console.log(linkToString(links[i]))
-   }
-  
+    }
+
 </script>
+</body>
+</html>
