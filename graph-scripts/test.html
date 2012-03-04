@@ -8,6 +8,7 @@
 <body>
   <div id="graph"/>
   <script type="text/javascript" src="scripts/browser-graph.js"></script>
+  <script type="text/javascript" src="scripts/graph-selection.js"></script>
   
   <script type="text/javascript">
     // inline javascript yeaaah!
@@ -21,9 +22,17 @@
             .attr("width", 960)
             .attr("height", 500);
             
+    var selection = new GraphSelection(svg);
     var browserGraph = new BrowserGraph(svg);
     browserGraph.addNode(nodes);
     browserGraph.addLink(links);
+    
+    selection.onSelection(function() {
+      var lastrect = selection.getLastRect();
+      browserGraph.select(function(d) {
+        return (d.x > lastrect.x && d.x < lastrect.x + lastrect.width && d.y > lastrect.y && d.y < lastrect.y + lastrect.height);
+      });
+    });
   </script>
 
   <a href="javascript:browserGraph.addRando();">hello</a>

@@ -5,6 +5,7 @@ function BrowserGraph(svg) {
   viewport.append("svg:g").attr("class", "description-layer");
 
   var nodes = [];
+  var selection = [];
   var links = [];
   var width = parseInt(svg.attr("width"));
   var height = parseInt(svg.attr("height"));
@@ -58,11 +59,19 @@ function BrowserGraph(svg) {
     var allNodes = svg.selectAll("g.node-layer").selectAll("g.node")
               .data(nodes);
 
+    // we have to update selection for everything
+
     var newNodes = allNodes.enter().append("svg:g")
               .attr("class", "node")
               .call(graph.drag)
               .on("click", nodeClicked)
               .on("mousedown", nodeMouseDown)
+    newNodes.append("svg:rect")
+              .attr("width",20)
+              .attr("height",20)
+              .attr("x",-10)
+              .attr("y",-10)
+              .attr("class", "node-selection-indicator");
     newNodes.append("svg:image")
               .attr("width",16)
               .attr("height",16)
@@ -75,6 +84,7 @@ function BrowserGraph(svg) {
               .attr("dy", ".35em")
               .text(function(d) {return d.title;});
     allNodes.exit().remove();
+    allNodes.classed("selected-node", function(d) { console.log(d.selected); return d.selected;})
 
     nodeDescriptions = updateNodeDescriptions();
     return svg.selectAll("g.node");
@@ -154,6 +164,21 @@ function BrowserGraph(svg) {
     if (index < 0) index = undefined;
     console.log(index);
     this.addNodeWithParent({"title":"test1", "image":"images/facebook.ico"},index);
+  }
+
+  this.select = function(predicate) {
+    selection = nodes.filter(predicate);
+    nodes.forEach(function(d) {
+      d.selected = false;
+    });
+    selection.forEach(function(d) {
+      d.selected = true;
+    });
+    update();
+  }
+
+  this.getSelection = function() {
+    return selection;
   }
 
   var freezeNodes = function() {

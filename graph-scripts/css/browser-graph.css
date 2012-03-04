@@ -9,3 +9,15 @@ svg g.node .node-title-label {
 svg g.node:hover .node-title-label {
   visibility:visible;
 }
+
+svg g.node .node-selection-indicator {
+  fill:rgba(0, 0, 0, 0);
+}
+
+svg g.node.selected-node .node-selection-indicator {
+  fill: rgb(255, 255, 0);
+}
+
+svg .selection-rectangle {
+  fill:rgba(255, 255, 0, .2);
+}
