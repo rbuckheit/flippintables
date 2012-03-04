@@ -1,3 +1,69 @@
+/* This has to clear out the styles of the taret page.
+    http://meyerweb.com/eric/tools/css/reset/ 
+    v2.0 | 20110126
+    License: none (public domain)
+*/
+
+#ftables_graph html, #ftables_graph body, #ftables_graph div, 
+#ftables_graph span, #ftables_graph applet, #ftables_graph object,
+#ftables_graph iframe,h1, #ftables_graph h2, #ftables_graph h3
+#ftables_graph h4, #ftables_graph h5, #ftables_graph h6, #ftables_graph p, 
+#ftables_graph blockquote, #ftables_graph pre,a, #ftables_graph abbr, 
+#ftables_graph acronym, #ftables_graph address, #ftables_graph big, 
+#ftables_graph cite, #ftables_graph code,del, #ftables_graph dfn, 
+#ftables_graph em, #ftables_graph img, #ftables_graph ins, #ftables_graph kbd, 
+#ftables_graph q, #ftables_graph s, #ftables_graph samp,small, 
+#ftables_graph strike, #ftables_graph strong, #ftables_graph sub, 
+#ftables_graph sup, #ftables_graph tt, #ftables_graph var,b, #ftables_graph u, 
+#ftables_graph i, #ftables_graph center,dl, #ftables_graph dt, #ftables_graph dd,
+#ftables_graph ol, #ftables_graph ul, #ftables_graph li,fieldset, 
+#ftables_graph form, #ftables_graph label, #ftables_graph legend,table, 
+#ftables_graph caption, #ftables_graph tbody, #ftables_graph tfoot, 
+#ftables_graph thead, #ftables_graph tr, #ftables_graph th, #ftables_graph td,
+#ftables_graph article, #ftables_graph aside, #ftables_graph canvas, 
+#ftables_graph details, #ftables_graph embed, #ftables_graph figure, 
+#ftables_graph figcaption, #ftables_graph footer, #ftables_graph header, 
+#ftables_graph hgroup, #ftables_graph menu, #ftables_graph nav, 
+#ftables_graph output, #ftables_graph ruby, #ftables_graph section, 
+#ftables_graph summary,time, #ftables_graph mark, #ftables_graph audio, 
+#ftables_graph video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	font-size: 12px;
+	font-family: Verdana, Sans-serif;
+}
+
+#ftables_graph article, #ftables_graph aside, #ftables_graph details, 
+#ftables_graph figcaption, #ftables_graph figure, #ftables_graph footer, 
+#ftables_graph header, #ftables_graph hgroup, #ftables_graph menu,
+#ftables_graph nav, #ftables_graph section {
+	display: block;
+}
+#ftables_graph body {
+	line-height: 1;
+}
+#ftables_graph ol, #ftables_graph ul {
+	list-style: none;
+}
+#ftables_graph blockquote, #ftables_graph q {
+	quotes: none;
+}
+#ftables_graph blockquote:before, #ftables_graph blockquote:after,
+#ftables_graph q:before, #ftables_graph q:after {
+	content: '';
+	content: none;
+}
+#ftables_graph table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* Graph Styles */
+
 #ftables_graph {
     display: none;
     position: fixed;
