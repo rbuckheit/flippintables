@@ -10,7 +10,7 @@ $(document).ready(function() {
   } else {
     favicon = qualify_url(favicon_local);
   }
-  var title = "" //TODO jess
+  var title = $("title").text();
   
   chrome.extension.sendRequest({cmd: "node_info", url: url, favicon: favicon, title: title}, function(response) {
     console.log("RESPONSE: " + response.cmd);

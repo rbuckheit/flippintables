@@ -37,8 +37,9 @@
       else if (request.cmd == "node_info") {
         var favicon = request.favicon;
         var title = request.title;
+        var date= new Date().getTime();
         var node = nodes[loadNode(request.url)];
-        console.log("NODE INFO [" + node.url + "] " + favicon + " " + title);
+        console.log("NODE INFO [" + node.url + "] " + favicon + " " + title + " timestamp " + date);
         node.title = title
         node.favicon = favicon
         printNodes();
