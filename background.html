@@ -19,7 +19,9 @@
       else if (request.cmd == "node_info") {
         var favicon = request.favicon;
         var title = request.title;
-        
+        var url= request.url;
+        console.log("Node info [" + url + "] " + favicon + " " + title);
+        // TODO 
       }
       
       else {
@@ -32,6 +34,10 @@
         sendResponse({});
 
   });
+  
+  function loadNode(url) {
+    
+  }
   
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       console.log("TAB CHANGE HAPPENED");
