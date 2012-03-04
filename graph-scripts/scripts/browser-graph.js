@@ -99,7 +99,12 @@ function BrowserGraph(svg) {
               .attr("height",16)
               .attr("x",-8)
               .attr("y",-8)
-              .attr("xlink:href", function(d){return d.image;});
+              .attr("xlink:href", function(d){
+                if (d.image == undefined) {
+                  return chrome.extension.getURL("default_favicon.png");
+                }
+                return d.image;
+              });
     newNodes.append("svg:text")
               .attr("class", "node-title-label")
               .attr("dx", 12)

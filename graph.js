@@ -1,6 +1,6 @@
 // insert graph div in to page
 
-$(document.body).append("<div id=\"ftables_graph\"><p>Hi</p></div>")
+$(document.body).append("<div id=\"ftables_graph\"></div>")
 
 // browser graph stuff
 var browserGraph;
