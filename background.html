@@ -28,10 +28,13 @@
       var respond = true;
       
       if (request.cmd == "add_link") {
-        var src_id = loadNode(request.src);
-        var dest_id = loadNode(request.dest);
-        links.push({"src": src_id, "dest": dest_id});
-        console.log("ADD LINK: " + nodes[src_id] + " => " + nodes[dest_id]);
+        // TODO: error conditions -- duplicate links, etc.
+        if (request.src != request.dest) {
+          var src_id = loadNode(request.src);
+          var dest_id = loadNode(request.dest);
+          links.push({"src": src_id, "dest": dest_id});
+          console.log("ADD LINK: " + nodeToString(nodes[src_id]) + " => " + nodeToString(nodes[dest_id]));
+        }
       } 
       
       else if (request.cmd == "node_info") {
@@ -56,6 +59,15 @@
 
   });
   
+  /*
+  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+      console.log("TAB CHANGE HAPPENED");
+  });*/
+  
+  /*=======
+   * NODES 
+   *======*/
+  
   // load node with specified url. creates node if it doesn't exist.
   // returns index in the nodes list
   function loadNode(url) {
@@ -78,17 +90,21 @@
     }
   }
   
+  function nodeToString(node) {
+    return "\t[url=" + node.url + ", title=" + node.title + ", favicon=" + node.favicon  + "]";
+  }
+  
   // print contents of nodes list.
   function printNodes() {
     console.log("NODES:");
-    for (i = 0; i < nodes.length; i += 1) {
-      var node = nodes[i];
-      console.log("\t[url=" + node.url + ", title=" + node.title + ", favicon=" + node.favicon  + "]");
-    }
+    for (i = 0; i < nodes.length; i += 1)
+      console.log(nodeToString(nodes[i]));
   }
   
-  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-      console.log("TAB CHANGE HAPPENED");
-  });
+  /*=======
+   * LINKS
+   *======*/
+  
+
 
 </script>
