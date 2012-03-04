@@ -24,7 +24,13 @@
   // turn on or off node recording when browser action icon clicked
   chrome.browserAction.onClicked.addListener(function(tab) {
     recording = !recording;
-    console.log("Set recording to " + recording)
+    console.log("Set recording to " + recording);
+    if (recording == false){
+      chrome.browserAction.setIcon({path:"icon_false.png"});
+    }
+    else {
+      chrome.browserAction.setIcon({path:"icon.png"});
+    }
   });
   
 //  chrome.extension.onRequest.addListener( 
